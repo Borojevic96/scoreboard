@@ -1,8 +1,8 @@
+import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateOngoingMatch } from "@reducers/app.ts";
 import { getOngoingMatches } from "@selectors/app.selectors.ts";
 import { OngoingMatch } from "@types";
-import { useMemo } from "react";
 
 const MatchesScoreBoard = () => {
   const dispatch = useDispatch();

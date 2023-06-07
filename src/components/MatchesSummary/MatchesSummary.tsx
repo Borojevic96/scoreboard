@@ -1,6 +1,6 @@
+import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { getOngoingMatches } from "@selectors/app.selectors.ts";
-import { useMemo } from "react";
 
 const MatchesSummary = () => {
   const ongoingMatches = useSelector(getOngoingMatches);
