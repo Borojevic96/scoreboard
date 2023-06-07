@@ -2,12 +2,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateOngoingMatch } from "@reducers/app.ts";
 import { getOngoingMatches } from "@selectors/app.selectors.ts";
 import { OngoingMatch } from "@types";
+import { useMemo } from "react";
 
 const MatchesScoreBoard = () => {
   const dispatch = useDispatch();
   const ongoingMatches = useSelector(getOngoingMatches);
-  const filteredOngoingMatches = ongoingMatches.filter(
-    (match) => !match.ended_at
+  const filteredOngoingMatches = useMemo(
+    () => ongoingMatches.filter((match) => !match.ended_at),
+    [ongoingMatches]
   );
 
   const handleScoreUpdate = (

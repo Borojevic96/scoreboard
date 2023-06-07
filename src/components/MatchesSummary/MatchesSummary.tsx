@@ -1,10 +1,27 @@
 import { useSelector } from "react-redux";
 import { getOngoingMatches } from "@selectors/app.selectors.ts";
+import { useMemo } from "react";
 
 const MatchesSummary = () => {
   const ongoingMatches = useSelector(getOngoingMatches);
-  const filteredOngoingMatches = ongoingMatches.filter(
-    (match) => !match.ended_at
+  const filteredOngoingMatches = useMemo(
+    () =>
+      ongoingMatches
+        .filter((match) => !match.ended_at)
+        .sort((teamA, teamB) => {
+          const teamAScores = teamA.home_team.score + teamA.away_team.score;
+          const teamBScores = teamB.home_team.score + teamB.away_team.score;
+          const dateComparison =
+            new Date(teamB.started_at).getTime() -
+            new Date(teamA.started_at).getTime();
+
+          if (teamAScores === teamBScores) {
+            return dateComparison;
+          }
+
+          return teamBScores - teamAScores;
+        }),
+    [ongoingMatches]
   );
 
   return (
@@ -22,35 +39,19 @@ const MatchesSummary = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredOngoingMatches
-              .sort((teamA, teamB) => {
-                const teamAScores =
-                  teamA.home_team.score + teamA.away_team.score;
-                const teamBScores =
-                  teamB.home_team.score + teamB.away_team.score;
-                const dateComparison =
-                  new Date(teamB.started_at).getTime() -
-                  new Date(teamA.started_at).getTime();
-
-                if (teamAScores === teamBScores) {
-                  return dateComparison;
-                }
-
-                return teamBScores - teamAScores;
-              })
-              .map((ongoingMatch) => {
-                return (
-                  <tr
-                    key={
-                      ongoingMatch.home_team.name + ongoingMatch.away_team.name
-                    }
-                  >
-                    <td>{ongoingMatch.home_team.name}</td>
-                    <td>{`${ongoingMatch.home_team.score} : ${ongoingMatch.away_team.score}`}</td>
-                    <td>{ongoingMatch.away_team.name}</td>
-                  </tr>
-                );
-              })}
+            {filteredOngoingMatches.map((ongoingMatch) => {
+              return (
+                <tr
+                  key={
+                    ongoingMatch.home_team.name + ongoingMatch.away_team.name
+                  }
+                >
+                  <td>{ongoingMatch.home_team.name}</td>
+                  <td>{`${ongoingMatch.home_team.score} : ${ongoingMatch.away_team.score}`}</td>
+                  <td>{ongoingMatch.away_team.name}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       )}

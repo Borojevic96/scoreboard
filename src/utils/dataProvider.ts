@@ -1,6 +1,6 @@
 import { Match } from "@types";
 
-const mockedMatchesData: Match[] = [
+const matchesData: Match[] = [
   {
     id: 1,
     started_at: null,
@@ -68,4 +68,4 @@ const mockedMatchesData: Match[] = [
   },
 ];
 
-export default mockedMatchesData;
+export default matchesData;
